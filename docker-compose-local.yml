@@ -1,0 +1,20 @@
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    entrypoint: redis-server --appendonly yes
+    
+  web:
+    build:
+      context: ./
+      dockerfile: dev.Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/blogapp
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+volumes:
+  dbdata:
